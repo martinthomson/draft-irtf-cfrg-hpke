@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2020-12-02T14:26:51.936037+00:00",
+  "timestamp": "2020-12-11T21:04:48.940801+00:00",
   "repo": "cfrg/draft-irtf-cfrg-hpke",
   "labels": [
     {
@@ -2153,15 +2153,15 @@
       "id": "MDU6SXNzdWU3NDgzMjM0NTI=",
       "title": "Add (back?) DeserializePublicKey()",
       "url": "https://github.com/cfrg/draft-irtf-cfrg-hpke/issues/176",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "chris-wood",
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
       "labels": [],
       "body": "This is absent from the KEM interface, though implicit throughout the document. Since we list DeserializePrivateKey separately, we might as well add this to the KEM interface, too. ",
       "createdAt": "2020-11-22T19:12:57Z",
-      "updatedAt": "2020-11-23T09:26:44Z",
-      "closedAt": null,
+      "updatedAt": "2020-12-02T14:29:26Z",
+      "closedAt": "2020-12-02T14:29:26Z",
       "comments": [
         {
           "author": "blipp",
@@ -2171,6 +2171,133 @@
           "updatedAt": "2020-11-23T09:26:44Z"
         }
       ]
+    },
+    {
+      "number": 185,
+      "id": "MDU6SXNzdWU3NTk1NDg3OTc=",
+      "title": "AEAD ID for unsupported AEADs",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-hpke/issues/185",
+      "state": "OPEN",
+      "author": "jedisct1",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": "HPKE currently defines only 3 possible AEADs to be used with.\r\n\r\nHowever, HPKE could be very useful as a generic key exchange mechanism, to be used with other AEADs or with anything requiring a shared secret.\r\n\r\nWas `0x00` as an AEAD ID reserved for that use case? Or has another approach that would possibly provide domain separation between AEADs been discussed?",
+      "createdAt": "2020-12-08T15:38:33Z",
+      "updatedAt": "2020-12-10T23:30:55Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "blipp",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "For other AEADs, an AEAD ID can be registered with IANA, see  https://github.com/cfrg/draft-irtf-cfrg-hpke/blob/master/draft-irtf-cfrg-hpke.md#authenticated-encryption-with-associated-data-aead-functions-aead-ids and https://github.com/cfrg/draft-irtf-cfrg-hpke/blob/master/draft-irtf-cfrg-hpke.md#iana-considerations-iana. The reserved `0x00` should not be used. @chris-wood might be able to detail how to get IDs assigned by IANA. I assume IDs can only be registered as soon as the RFC is published, and thus IANA is aware of this namespace.\r\n",
+          "createdAt": "2020-12-08T15:47:05Z",
+          "updatedAt": "2020-12-08T15:47:05Z"
+        },
+        {
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "body": "@jedisct1 can you please elaborate on the request? Do you basically want a range of IDs for experimental use?",
+          "createdAt": "2020-12-08T23:50:03Z",
+          "updatedAt": "2020-12-08T23:50:03Z"
+        },
+        {
+          "author": "jedisct1",
+          "authorAssociation": "NONE",
+          "body": "Hi Chris,\r\n\r\nHPKE combines a key exchange mechanism with encryption.\r\n\r\nHowever, it could be useful in a broader range of applications and protocols if it could be used only for key exchange, delegating the encryption part to applications.\r\n\r\nHaving standardized suites (which include an AEAD) is a no brainer for ensuring interoperability between application solely depending on HPKE for hybrid key encryption.\r\n\r\nBut it is a limitation for other protocols that already use more than HPKE. Actual examples:\r\n\r\n- Permutation-based AEADs using a rolling state (such as Xoodyak) don\u2019t fit in the HPKE model that increments a nonce after each message. However, they could still benefit from HPKE to absorb keying material.\r\n- Existing high-level protocols and APIs for stream encryption (taking care of rekeying, and out of band signalisation) could leverage HPKE as a key exchange mechanism.\r\n- In the context of a crypto library or a standard library, users will expect such a mechanism to be compatible with anything a uniform shared secret could be useful for. Including AEADs that can be better suited than AES depending on the context.\r\n\r\nA protocol will not have any interoperability issues if the key exchange mechanism and the AEAD (or anything else) are defined separately.\r\n\r\nRegistering new IANA identifiers is not a practical option for most cases. Higher-level protocols (especially application-specific ones) don\u2019t have their place in a global namespace. And even at a primitive level, while using AEGIS or GIFT-COFB as an AEAD could be justified by application requirements, having these in the IANA database would probably be unwanted.\r\n\r\nApplications will inevitably either use custom versions of HPKE, or mix and match NOISE and HPKE just to fit the set of AEADs and encryption operations currently supported by HPKE. \r\n\r\nSo, in order to encourage reusability and make HPKE also useful beyond the current encryption API, my proposal would be to reserve an AEAD identifier for protocol-defined use of the shared key, nonce, or exporter secret. Such identifier might be followed by a label in order to provide domain separation.\r\n",
+          "createdAt": "2020-12-09T14:49:57Z",
+          "updatedAt": "2020-12-09T16:18:39Z"
+        },
+        {
+          "author": "blipp",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Thanks for the detailed description. If I understand right, these are examples that do not use HPKE's encryption API. Instead, they are only interested in using key material (key, nonce) exchanged by HPKE, for external use?\r\n\r\nApplications should not use the `key` and `nonce` values computed by HPKE for such external uses. They should use [the secret export API](https://github.com/cfrg/draft-irtf-cfrg-hpke/blob/master/draft-irtf-cfrg-hpke.md#secret-export) to generate them. This API allows domain separation of different uses with the `exporter_context` parameter. If an application needs multiple values (for example a key and a nonce), one exporter secret of sufficient length can be cut into two.\r\n\r\nI see that at least one question remains open, and that is: if the user only uses the secret export API and never the encryption API, which `aead_id` should be used in the `suite_id`? That's a good question. The single-shot secret export API was added only recently and this is certainly a question that has not been addressed so far. Thanks for pointing it out.\r\n\r\nAs a workaround, you could just use any valid AEAD ID supported by you HPKE implementation, and it does not matter which one (of course all parties involved in your protocol need to know which one). I agree for such use cases this ID seems superfluous and its arbitrary choice is error prone.\r\n\r\n@chris-wood @bifurcation Do you have an idea how to address this? Allowing the use of `0x00` if an application does not use the encryption API?",
+          "createdAt": "2020-12-09T15:52:16Z",
+          "updatedAt": "2020-12-09T15:52:29Z"
+        },
+        {
+          "author": "jedisct1",
+          "authorAssociation": "NONE",
+          "body": "Besides improving clarity, if only the `exporter_context` is available for that use case, having a dedicated ID would have a performance advantage: the key and base nonce don't have to be computed.",
+          "createdAt": "2020-12-09T16:18:12Z",
+          "updatedAt": "2020-12-09T16:18:20Z"
+        },
+        {
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "body": "@blipp your suggestion (use any AEAD except `0x00`) would be my recommendation. Applications that just want to use HPKE to derive a shared secret can use the Export API to key other AEADs that don't fit into the HPKE AEAD API. \r\n\r\n@jedisct1, would that work for your use case (and libsodium)? I agree that adding a note which says implementations that don't use the encryption API, but only use the Export interface, can skip deriving the key and base nonce.",
+          "createdAt": "2020-12-10T15:43:39Z",
+          "updatedAt": "2020-12-10T15:43:39Z"
+        },
+        {
+          "author": "jedisct1",
+          "authorAssociation": "NONE",
+          "body": "Wouldn't a non-`0x00` dedicated ID (maybe `0xffff`) be an option, if only to make the intent clear rather than use an ID that doesn't match the actual use?",
+          "createdAt": "2020-12-10T15:54:16Z",
+          "updatedAt": "2020-12-10T15:54:16Z"
+        },
+        {
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "body": "> Wouldn't a non-0x00 dedicated ID (maybe 0xffff) be an option, if only to make the intent clear rather than use an ID that doesn't match the actual use?\r\n\r\nWe could reserve `0xFFFF` for such cases, yeah. I don't see any harm in that. :)",
+          "createdAt": "2020-12-10T15:56:04Z",
+          "updatedAt": "2020-12-10T15:56:04Z"
+        },
+        {
+          "author": "danharkins",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "I also want to add some AEAD algorithms and if you check out my hpke-wrap implementation you can see I'm already poaching a couple values (that will, of course, change) and how I intend on using them. The IANA registry says \"specification required\" so that means writing an I-D indicating how the algorithm is used (for my case they don't require a nonce/sequence number) once the HPKE I-D becomes an RFC. Until then, might I suggest reserving a value for \"experimental\" and have IANA assign those when it assigns 0-3.",
+          "createdAt": "2020-12-10T23:30:54Z",
+          "updatedAt": "2020-12-10T23:30:54Z"
+        }
+      ]
+    },
+    {
+      "number": 187,
+      "id": "MDU6SXNzdWU3NjA1OTgyMjY=",
+      "title": "Emphasize the fact that messages must never be encrypted by the recipient",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-hpke/issues/187",
+      "state": "OPEN",
+      "author": "jedisct1",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": "Reading the document doesn't make it clear that the sender should only encrypt, and the recipient should only decrypt. Or that they must take turns and decrypt everything from the other party before encrypting a new message. That seems to be dangerous.\r\n\r\nThe proposed API doesn't prevent this, which can lead users to thinking that HPKE is safe to use for two-way communications.\r\n\r\nThat would be catastrophic as nonces would be reused.\r\n\r\nMaybe the document should insist a little bit on this ?\r\n\r\nOr, if we want to safely allow communications both ways, we can add a function to derive two AEAD keys, for each direction (the `ENCRYPT` and `DECRYPT` functions can keep the current API, if they know whether a party was the initiator or the responder).\r\n",
+      "createdAt": "2020-12-09T19:12:59Z",
+      "updatedAt": "2020-12-10T16:17:10Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "body": "> Reading the document doesn't make it clear that the sender should only encrypt, and the recipient should only decrypt. Or that they must take turns and decrypt everything from the other party before encrypting a new message. That seems to be dangerous.\r\n\r\nIs this text not sufficiently clear?\r\n\r\n~~~\r\nEncryption is unidirectional from sender to recipient. Each encryption or decryption operation increments the sequence number for the context in use. The sender's context MUST NOT be used for decryption. Similarly, the recipient's context MUST NOT be used for encryption.\r\n~~~\r\n\r\n> The proposed API doesn't prevent this, which can lead users to thinking that HPKE is safe to use for two-way communications.\r\n\r\nThat's true. Perhaps we could refactor the interface into a Sender and Receiver role, with `Seal` and `Open` on each role, respectively, to make this clear. I'll play with this and see if I can make it clear.\r\n\r\n> Or, if we want to safely allow communications both ways, we can add a function to derive two AEAD keys, for each direction (the ENCRYPT and DECRYPT functions can keep the current API, if they know whether a party was the initiator or the responder).\r\n\r\nThat's probably too much of a change at this point. (It's been discussed at length in the past.) The typical pattern for applications that need to encrypt a response back to the sender is to `Export` an encryption key and nonce, and then `Seal` up the response. (Perhaps we should add text with this suggestion to the document?)",
+          "createdAt": "2020-12-10T15:48:39Z",
+          "updatedAt": "2020-12-10T15:48:39Z"
+        },
+        {
+          "author": "jedisct1",
+          "authorAssociation": "NONE",
+          "body": "The text is easy to overlook. The confusion mainly comes from the API design:\r\n\r\nthe sender and the recipient share the same `Context` structure. A literal implementation of the documented API results in something where the recipient can encrypt.\r\n\r\n> The typical pattern for applications that need to encrypt a response back to the sender is to Export an encryption key and nonce, and then Seal up the response. (Perhaps we should add text with this suggestion to the document?)\r\n\r\nThat would be a very useful addition. HPKE being documented as \"unidirectional\" may lead applications to doing a second full key exchange to send a response back (which would obviously be fine, but quite inefficient).",
+          "createdAt": "2020-12-10T16:17:10Z",
+          "updatedAt": "2020-12-10T16:17:10Z"
+        }
+      ]
+    },
+    {
+      "number": 189,
+      "id": "MDU6SXNzdWU3NjE3MTkyNjE=",
+      "title": "Compact representation for NIST curves",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-hpke/issues/189",
+      "state": "OPEN",
+      "author": "danharkins",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "OK, so I brought this up on the CFRG list and there were 2 people voicing some qualified support and no real opposition but then the topic just kind of died. I made a PR to show exactly what changes this would involve in the draft and it's been hanging there (by the way, the changes specified in the PR do not have all the test vector changes, but I will be happy to supply all of them if you agree to accept this PR but if you're going to reject this then there's no point). So allow me to raise this as an issue in the hope it elicits some discussion.\r\n\r\nThe NIST curves can be exchanged using \"compact representation\" per RFC 6090. That means just sending the x-coordinate. You don't even need to send a sign bit because the sign is not necessary since we're just doing Diffie-Hellman. This has the benefit of making Npk be the same as Nsk and Nsecret, just like the Bernstein curves. This makes the interface be a bit more uniform and cuts down on extraneous formatting (pre-pending with a 04, for instance). \r\n\r\nIn my implementation supporting compact representation I just do the equation of the curve and take the square root to get a y-coordinate (again, sign is irrelevant) in order to do the group operation. On the CFRG list Mike Hamburg mentioned that it's possible to do the x-only Montgomery ladder so even recovering y is not strictly necessary. \r\n\r\nI understand that there's no requirement on how one sends blobs of bits from one party to another and it's possible to do HPKE, get enc in the form of 04..x..y and then rip out x and send it to the other party who would, presumably reconstruct the 04..x..<either y> in order to pass it into HPKE but that's just horrible. The 04..x..y thing is a SECG-defined representation but there's really no reason to abide by that, especially when the 04 and the y-coordinate aren't needed.\r\n\r\nPlease consider accepting this PR. I'll be happy to finish the test vectors if you do.\r\n",
+      "createdAt": "2020-12-10T23:45:51Z",
+      "updatedAt": "2020-12-10T23:45:51Z",
+      "closedAt": null,
+      "comments": []
     }
   ],
   "pulls": [
@@ -13853,24 +13980,26 @@
       "id": "MDExOlB1bGxSZXF1ZXN0NTMwNDA2MjUx",
       "title": "Fix editorial issues based on Stanislav's feedback",
       "url": "https://github.com/cfrg/draft-irtf-cfrg-hpke/pull/178",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "chris-wood",
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
       "labels": [],
       "body": "Also, fix idnit issues outside of the test vectors.\r\n\r\ncc @blipp ",
       "createdAt": "2020-12-01T16:00:11Z",
-      "updatedAt": "2020-12-02T13:14:41Z",
+      "updatedAt": "2020-12-02T15:10:31Z",
       "baseRepository": "cfrg/draft-irtf-cfrg-hpke",
       "baseRefName": "master",
-      "baseRefOid": "3bb167263c4775a7cd7a0f7905b11f9d8d1527db",
+      "baseRefOid": "58761fae29f35a719a7419e886b5256294a3d752",
       "headRepository": "cfrg/draft-irtf-cfrg-hpke",
       "headRefName": "caw/stanislav-nits",
-      "headRefOid": "79da75966b83c1500be11b007889a904b0d5aa7c",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "headRefOid": "513b99b487cff419f7e96d6f10c4332815fbe75b",
+      "closedAt": "2020-12-02T15:10:31Z",
+      "mergedAt": "2020-12-02T15:10:31Z",
+      "mergedBy": "bifurcation",
+      "mergeCommit": {
+        "oid": "a7a331895564c9517fb8a9be42e40b3a98019188"
+      },
       "comments": [],
       "reviews": [
         {
@@ -13889,7 +14018,7 @@
               "originalPosition": 235,
               "body": "Good catch!",
               "createdAt": "2020-12-02T13:12:15Z",
-              "updatedAt": "2020-12-02T13:12:15Z"
+              "updatedAt": "2020-12-02T14:34:55Z"
             }
           ]
         },
@@ -13909,7 +14038,7 @@
               "originalPosition": 252,
               "body": "```suggestion\r\nJo\u00ebl Alwen,\r\n```",
               "createdAt": "2020-12-02T13:12:37Z",
-              "updatedAt": "2020-12-02T13:12:37Z"
+              "updatedAt": "2020-12-02T14:34:55Z"
             }
           ]
         },
@@ -13929,9 +14058,42 @@
               "originalPosition": 256,
               "body": "I'd like to add\r\n```\r\nBruno Blanchet,\r\nEduard Hauck,\r\nDoreen Riepel,\r\n```\r\nCould you please add them to this PR? :) (at the right spot according to alphabetic order)",
               "createdAt": "2020-12-02T13:14:41Z",
-              "updatedAt": "2020-12-02T13:14:41Z"
+              "updatedAt": "2020-12-02T14:34:55Z"
             }
           ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTQyODk0MjAz",
+          "commit": {
+            "abbreviatedOid": "a4b51f3"
+          },
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2020-12-02T14:33:41Z",
+          "updatedAt": "2020-12-02T14:33:41Z",
+          "comments": [
+            {
+              "originalPosition": 256,
+              "body": "Done!",
+              "createdAt": "2020-12-02T14:33:41Z",
+              "updatedAt": "2020-12-02T14:34:55Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTQyOTMzMTc4",
+          "commit": {
+            "abbreviatedOid": "513b99b"
+          },
+          "author": "bifurcation",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2020-12-02T15:10:26Z",
+          "updatedAt": "2020-12-02T15:10:26Z",
+          "comments": []
         }
       ]
     },
@@ -13940,24 +14102,26 @@
       "id": "MDExOlB1bGxSZXF1ZXN0NTMwNDY3NDAy",
       "title": "Add DeserializePublicKey to match SerializePublicKey.",
       "url": "https://github.com/cfrg/draft-irtf-cfrg-hpke/pull/179",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "chris-wood",
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
       "labels": [],
       "body": "Closes #176.\r\n\r\ncc @blipp ",
       "createdAt": "2020-12-01T17:40:01Z",
-      "updatedAt": "2020-12-02T14:26:16Z",
+      "updatedAt": "2020-12-02T14:29:26Z",
       "baseRepository": "cfrg/draft-irtf-cfrg-hpke",
       "baseRefName": "master",
       "baseRefOid": "f0d5e93b9cf33107b9b305d033afa7636f5be883",
       "headRepository": "cfrg/draft-irtf-cfrg-hpke",
       "headRefName": "caw/add-deserialize-public-key",
       "headRefOid": "941ebc3f0075669d089963069edf260c8bb11f38",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "closedAt": "2020-12-02T14:29:26Z",
+      "mergedAt": "2020-12-02T14:29:26Z",
+      "mergedBy": "chris-wood",
+      "mergeCommit": {
+        "oid": "1a25ab6c0a882695c5ac99e6f2241b2792c826ae"
+      },
       "comments": [],
       "reviews": [
         {
@@ -13987,26 +14151,42 @@
       "id": "MDExOlB1bGxSZXF1ZXN0NTMxMDAyMTY1",
       "title": "Add link to eprint and update title",
       "url": "https://github.com/cfrg/draft-irtf-cfrg-hpke/pull/180",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "blipp",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "The eprint is now public, so this PR adds a link and updates the paper's title.",
       "createdAt": "2020-12-02T13:03:17Z",
-      "updatedAt": "2020-12-02T13:03:17Z",
+      "updatedAt": "2020-12-02T14:29:43Z",
       "baseRepository": "cfrg/draft-irtf-cfrg-hpke",
       "baseRefName": "master",
       "baseRefOid": "f0d5e93b9cf33107b9b305d033afa7636f5be883",
       "headRepository": "blipp/draft-irtf-cfrg-hpke",
       "headRefName": "blipp_paper",
       "headRefOid": "3e871cd3bbaf61674638808005796693e9fb085d",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "closedAt": "2020-12-02T14:29:43Z",
+      "mergedAt": "2020-12-02T14:29:43Z",
+      "mergedBy": "chris-wood",
+      "mergeCommit": {
+        "oid": "58761fae29f35a719a7419e886b5256294a3d752"
+      },
       "comments": [],
-      "reviews": []
+      "reviews": [
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTQyODkwMDA1",
+          "commit": {
+            "abbreviatedOid": "3e871cd"
+          },
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2020-12-02T14:29:39Z",
+          "updatedAt": "2020-12-02T14:29:39Z",
+          "comments": []
+        }
+      ]
     },
     {
       "number": 181,
@@ -14069,6 +14249,210 @@
           "comments": []
         }
       ]
+    },
+    {
+      "number": 182,
+      "id": "MDExOlB1bGxSZXF1ZXN0NTMxOTg5NTEw",
+      "title": "DNH: changes to support compact representation for NIST curves",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-hpke/pull/182",
+      "state": "OPEN",
+      "author": "danharkins",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Hi, I brought this up on the cfrg list and it kind of died so I figured I'd give you an idea of what I'm talking about. Please see the proposed changes. Basically, the change is that for the NIST curves the encapsulated public key is just the x-coordinate. That's what gets produced by Serialize() and that's what Deserialize() expects. As a result Nenc seemed kind of unnecessary so I got rid of it.\r\n\r\nI implemented this and the Diffie-Hellman shared secrets matched (as they should) but the kem_context is different so everything derived from the Diffie-Hellman secret is different. So new test vectors. Updating the test vectors is a PITA so I didn't do all of them but I will if you agree with this PR.",
+      "createdAt": "2020-12-03T18:30:20Z",
+      "updatedAt": "2020-12-03T18:30:20Z",
+      "baseRepository": "cfrg/draft-irtf-cfrg-hpke",
+      "baseRefName": "master",
+      "baseRefOid": "a7a331895564c9517fb8a9be42e40b3a98019188",
+      "headRepository": "danharkins/draft-irtf-cfrg-hpke",
+      "headRefName": "master",
+      "headRefOid": "4d6a9f6e5b6f3b8dea6ac9ab44bf057c462f55b1",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 183,
+      "id": "MDExOlB1bGxSZXF1ZXN0NTM0Mjc0ODE5",
+      "title": "Automatic spell and grammar check",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-hpke/pull/183",
+      "state": "MERGED",
+      "author": "blipp",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "I ran https://languagetool.org/ over the text.\r\n\r\n`widely used`: https://www.grammar.com/compound-adjectives/\r\n\r\n[`implementers`](https://www.google.com/search?hl=en&q=implementer+site%3Aietf.org) seems to be used more in IETF documents than [`implementors`](https://www.google.com/search?hl=en&q=implementor+site%3Aietf.org).",
+      "createdAt": "2020-12-08T08:36:43Z",
+      "updatedAt": "2020-12-08T23:47:10Z",
+      "baseRepository": "cfrg/draft-irtf-cfrg-hpke",
+      "baseRefName": "master",
+      "baseRefOid": "a7a331895564c9517fb8a9be42e40b3a98019188",
+      "headRepository": "blipp/draft-irtf-cfrg-hpke",
+      "headRefName": "blipp_spell_grammar",
+      "headRefOid": "0c1586bd49cd0fb8e735c5ffabc12532ed76dc5f",
+      "closedAt": "2020-12-08T23:47:10Z",
+      "mergedAt": "2020-12-08T23:47:10Z",
+      "mergedBy": "chris-wood",
+      "mergeCommit": {
+        "oid": "cdbef9a2539d80669bc86d8719dcb8d3fa77c768"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTQ3NzI4MDY1",
+          "commit": {
+            "abbreviatedOid": "0c1586b"
+          },
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2020-12-08T23:47:00Z",
+          "updatedAt": "2020-12-08T23:47:00Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 184,
+      "id": "MDExOlB1bGxSZXF1ZXN0NTM0Mjg1Njkw",
+      "title": "Add HACL* implementation",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-hpke/pull/184",
+      "state": "MERGED",
+      "author": "blipp",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2020-12-08T08:46:48Z",
+      "updatedAt": "2020-12-08T23:46:06Z",
+      "baseRepository": "cfrg/draft-irtf-cfrg-hpke",
+      "baseRefName": "master",
+      "baseRefOid": "a7a331895564c9517fb8a9be42e40b3a98019188",
+      "headRepository": "blipp/draft-irtf-cfrg-hpke",
+      "headRefName": "blipp_implem",
+      "headRefOid": "5ed9ae7c4c2b4ee5ec413f952e599fa81be2ccb7",
+      "closedAt": "2020-12-08T23:46:06Z",
+      "mergedAt": "2020-12-08T23:46:06Z",
+      "mergedBy": "chris-wood",
+      "mergeCommit": {
+        "oid": "829a6b0bad070fed8bc4e6ab7080e9ef3a04e319"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTQ3NzI3NjM2",
+          "commit": {
+            "abbreviatedOid": "5ed9ae7"
+          },
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2020-12-08T23:46:00Z",
+          "updatedAt": "2020-12-08T23:46:00Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 186,
+      "id": "MDExOlB1bGxSZXF1ZXN0NTM0Nzk3NTA3",
+      "title": "Adds CIRCL Go implementation.",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-hpke/pull/186",
+      "state": "MERGED",
+      "author": "armfazh",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "go get github.com/cloudflare/circl",
+      "createdAt": "2020-12-08T23:42:00Z",
+      "updatedAt": "2020-12-08T23:45:43Z",
+      "baseRepository": "cfrg/draft-irtf-cfrg-hpke",
+      "baseRefName": "master",
+      "baseRefOid": "a7a331895564c9517fb8a9be42e40b3a98019188",
+      "headRepository": "armfazh/draft-irtf-cfrg-hpke",
+      "headRefName": "patch-1",
+      "headRefOid": "62f48839a0a12232b3b3facc255d0fbbee83a7eb",
+      "closedAt": "2020-12-08T23:45:43Z",
+      "mergedAt": "2020-12-08T23:45:42Z",
+      "mergedBy": "chris-wood",
+      "mergeCommit": {
+        "oid": "e400fc373d478a0a7a2712f64cc558f278e593fb"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTQ3NzI3NDY1",
+          "commit": {
+            "abbreviatedOid": "62f4883"
+          },
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2020-12-08T23:45:34Z",
+          "updatedAt": "2020-12-08T23:45:34Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 188,
+      "id": "MDExOlB1bGxSZXF1ZXN0NTM2MzQzODcx",
+      "title": "Add hpke-compact, another implementation in Go",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-hpke/pull/188",
+      "state": "OPEN",
+      "author": "jedisct1",
+      "authorAssociation": "FIRST_TIME_CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Another Go implementation, but that one doesn't depend on CIRCL.",
+      "createdAt": "2020-12-10T23:45:23Z",
+      "updatedAt": "2020-12-10T23:45:23Z",
+      "baseRepository": "cfrg/draft-irtf-cfrg-hpke",
+      "baseRefName": "master",
+      "baseRefOid": "cdbef9a2539d80669bc86d8719dcb8d3fa77c768",
+      "headRepository": "jedisct1/draft-irtf-cfrg-hpke",
+      "headRefName": "patch-3",
+      "headRefOid": "a69430388ab298a85bf39b9c667dac74715261b6",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 190,
+      "id": "MDExOlB1bGxSZXF1ZXN0NTM3NDA0MDc2",
+      "title": "Add go-hpke-compact to the list of implementations.",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-hpke/pull/190",
+      "state": "OPEN",
+      "author": "chris-wood",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "cc @jedisct1 :-)",
+      "createdAt": "2020-12-11T21:04:27Z",
+      "updatedAt": "2020-12-11T21:04:27Z",
+      "baseRepository": "cfrg/draft-irtf-cfrg-hpke",
+      "baseRefName": "master",
+      "baseRefOid": "cdbef9a2539d80669bc86d8719dcb8d3fa77c768",
+      "headRepository": "cfrg/draft-irtf-cfrg-hpke",
+      "headRefName": "caw/add-go-hpke-compact",
+      "headRefOid": "327c5fe2e5ce1297fa1f3a06e1c3234c21c34dcc",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": []
     }
   ]
 }
