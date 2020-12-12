@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2020-12-11T21:04:48.940801+00:00",
+  "timestamp": "2020-12-12T17:19:25.604669+00:00",
   "repo": "cfrg/draft-irtf-cfrg-hpke",
   "labels": [
     {
@@ -14407,24 +14407,26 @@
       "id": "MDExOlB1bGxSZXF1ZXN0NTM2MzQzODcx",
       "title": "Add hpke-compact, another implementation in Go",
       "url": "https://github.com/cfrg/draft-irtf-cfrg-hpke/pull/188",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "jedisct1",
-      "authorAssociation": "FIRST_TIME_CONTRIBUTOR",
+      "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "Another Go implementation, but that one doesn't depend on CIRCL.",
       "createdAt": "2020-12-10T23:45:23Z",
-      "updatedAt": "2020-12-10T23:45:23Z",
+      "updatedAt": "2020-12-11T23:14:42Z",
       "baseRepository": "cfrg/draft-irtf-cfrg-hpke",
       "baseRefName": "master",
       "baseRefOid": "cdbef9a2539d80669bc86d8719dcb8d3fa77c768",
       "headRepository": "jedisct1/draft-irtf-cfrg-hpke",
       "headRefName": "patch-3",
       "headRefOid": "a69430388ab298a85bf39b9c667dac74715261b6",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "closedAt": "2020-12-11T23:14:41Z",
+      "mergedAt": "2020-12-11T23:14:41Z",
+      "mergedBy": "chris-wood",
+      "mergeCommit": {
+        "oid": "92d74de80ab25a365476c69724ab0125402d1696"
+      },
       "comments": [],
       "reviews": []
     },
@@ -14433,25 +14435,40 @@
       "id": "MDExOlB1bGxSZXF1ZXN0NTM3NDA0MDc2",
       "title": "Add go-hpke-compact to the list of implementations.",
       "url": "https://github.com/cfrg/draft-irtf-cfrg-hpke/pull/190",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "chris-wood",
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
       "labels": [],
       "body": "cc @jedisct1 :-)",
       "createdAt": "2020-12-11T21:04:27Z",
-      "updatedAt": "2020-12-11T21:04:27Z",
+      "updatedAt": "2020-12-11T23:14:52Z",
       "baseRepository": "cfrg/draft-irtf-cfrg-hpke",
       "baseRefName": "master",
       "baseRefOid": "cdbef9a2539d80669bc86d8719dcb8d3fa77c768",
       "headRepository": "cfrg/draft-irtf-cfrg-hpke",
       "headRefName": "caw/add-go-hpke-compact",
       "headRefOid": "327c5fe2e5ce1297fa1f3a06e1c3234c21c34dcc",
-      "closedAt": null,
+      "closedAt": "2020-12-11T23:14:52Z",
       "mergedAt": null,
       "mergedBy": null,
       "mergeCommit": null,
-      "comments": [],
+      "comments": [
+        {
+          "author": "jedisct1",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Duplicate of #188 :)",
+          "createdAt": "2020-12-11T23:01:13Z",
+          "updatedAt": "2020-12-11T23:01:13Z"
+        },
+        {
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Oops, missed that! ",
+          "createdAt": "2020-12-11T23:14:52Z",
+          "updatedAt": "2020-12-11T23:14:52Z"
+        }
+      ],
       "reviews": []
     }
   ]
