@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2020-12-12T17:19:25.604669+00:00",
+  "timestamp": "2020-12-14T15:53:11.338958+00:00",
   "repo": "cfrg/draft-irtf-cfrg-hpke",
   "labels": [
     {
@@ -14469,6 +14469,114 @@
           "updatedAt": "2020-12-11T23:14:52Z"
         }
       ],
+      "reviews": []
+    },
+    {
+      "number": 191,
+      "id": "MDExOlB1bGxSZXF1ZXN0NTM4MzIwNTQ5",
+      "title": "Add bidirectional response encryption example.",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-hpke/pull/191",
+      "state": "OPEN",
+      "author": "chris-wood",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "I'm not sure we should say much more here, since the number and length of all exported and subsequently derived secrets depends on the application. This should be sufficient to demonstrate the basic idea. \r\n\r\ncc @jedisct1, @blipp ",
+      "createdAt": "2020-12-12T17:20:33Z",
+      "updatedAt": "2020-12-12T19:14:58Z",
+      "baseRepository": "cfrg/draft-irtf-cfrg-hpke",
+      "baseRefName": "master",
+      "baseRefOid": "92d74de80ab25a365476c69724ab0125402d1696",
+      "headRepository": "cfrg/draft-irtf-cfrg-hpke",
+      "headRefName": "caw/add-bidirectional-note",
+      "headRefOid": "a148bbcbdd606a7b798449c488e481c337791f10",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [
+        {
+          "author": "jedisct1",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Looks good to me!",
+          "createdAt": "2020-12-12T18:00:25Z",
+          "updatedAt": "2020-12-12T18:00:25Z"
+        },
+        {
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "body": "I kept the additional Extract step because I would expect applications to include additional context in the secret derivation. I\u2019m not sure we need to say much there, though, so your first suggestion is fine with me.",
+          "createdAt": "2020-12-12T18:59:50Z",
+          "updatedAt": "2020-12-12T18:59:50Z"
+        },
+        {
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "body": "> Context (like for example an application name), is not randomness that needs to be spread \u2013 an Expand is enough to bind the result to the context.\n\nUnrelated, but I'd like to dig into this. Is there a substantial difference between passing context as Extract's salt vs Expand's info parameter? (HKDF does suggest that info is more appropriate for this use case.)\n",
+          "createdAt": "2020-12-12T19:14:58Z",
+          "updatedAt": "2020-12-12T19:14:58Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTUwODUzMjMz",
+          "commit": {
+            "abbreviatedOid": "c6145f2"
+          },
+          "author": "blipp",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "CHANGES_REQUESTED",
+          "body": "I think this is a good suggestion, and I like the text. Two alternative suggestions for the specific example because I think we do not need an Extract step (there is no new keying material from which we need to extract randomness).",
+          "createdAt": "2020-12-12T18:52:33Z",
+          "updatedAt": "2020-12-12T18:57:06Z",
+          "comments": [
+            {
+              "originalPosition": 38,
+              "body": "Instead of redoing an Extract + Expand iteration, I'd suggest a more lightweight example:\r\n\r\n```suggestion\r\n~~~\r\nkey = context.Export(\"response key\", Nk)\r\nnonce = context.Export(\"response nonce\", Nn)\r\n~~~\r\n```\r\nor if we can somehow express splitting of bitstrings in our pseudocode:\r\n\r\n```suggestion\r\n~~~\r\nkey, nonce = context.Export(\"response\", Nk + Nn)\r\n~~~\r\n```",
+              "createdAt": "2020-12-12T18:52:33Z",
+              "updatedAt": "2020-12-12T18:59:56Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTUwODU0MDc1",
+          "commit": {
+            "abbreviatedOid": "a148bbc"
+          },
+          "author": "blipp",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "Looks good to me now!\r\n\r\nContext (like for example an application name), is not randomness that needs to be spread \u2013 an Expand is enough to bind the result to the context.",
+          "createdAt": "2020-12-12T19:04:49Z",
+          "updatedAt": "2020-12-12T19:04:49Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 192,
+      "id": "MDExOlB1bGxSZXF1ZXN0NTM5NjA5NDM0",
+      "title": "Provide encryption and decryption API separation with different contexts",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-hpke/pull/192",
+      "state": "OPEN",
+      "author": "chris-wood",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Encryption is unidirectional. This change makes it so that sender contexts\r\nonly have an encryption API, and decryption contexts have a decryption API.\r\nThis hopefully hedges against confusion and context reuse, which may lead\r\nto accidental key and nonce reuse.\r\n\r\ncc @jedisct1, @blipp ",
+      "createdAt": "2020-12-14T15:52:58Z",
+      "updatedAt": "2020-12-14T15:52:58Z",
+      "baseRepository": "cfrg/draft-irtf-cfrg-hpke",
+      "baseRefName": "master",
+      "baseRefOid": "92d74de80ab25a365476c69724ab0125402d1696",
+      "headRepository": "cfrg/draft-irtf-cfrg-hpke",
+      "headRefName": "caw/context-api-separation",
+      "headRefOid": "f5cca38c2d2c3eae821a1a1c77ffa395ee7c661b",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
       "reviews": []
     }
   ]
