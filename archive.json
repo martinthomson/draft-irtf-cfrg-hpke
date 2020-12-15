@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2020-12-14T15:53:11.338958+00:00",
+  "timestamp": "2020-12-15T15:05:11.598611+00:00",
   "repo": "cfrg/draft-irtf-cfrg-hpke",
   "labels": [
     {
@@ -2177,15 +2177,15 @@
       "id": "MDU6SXNzdWU3NTk1NDg3OTc=",
       "title": "AEAD ID for unsupported AEADs",
       "url": "https://github.com/cfrg/draft-irtf-cfrg-hpke/issues/185",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "jedisct1",
-      "authorAssociation": "NONE",
+      "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "HPKE currently defines only 3 possible AEADs to be used with.\r\n\r\nHowever, HPKE could be very useful as a generic key exchange mechanism, to be used with other AEADs or with anything requiring a shared secret.\r\n\r\nWas `0x00` as an AEAD ID reserved for that use case? Or has another approach that would possibly provide domain separation between AEADs been discussed?",
       "createdAt": "2020-12-08T15:38:33Z",
-      "updatedAt": "2020-12-10T23:30:55Z",
-      "closedAt": null,
+      "updatedAt": "2020-12-15T03:20:13Z",
+      "closedAt": "2020-12-14T21:26:00Z",
       "comments": [
         {
           "author": "blipp",
@@ -2203,7 +2203,7 @@
         },
         {
           "author": "jedisct1",
-          "authorAssociation": "NONE",
+          "authorAssociation": "CONTRIBUTOR",
           "body": "Hi Chris,\r\n\r\nHPKE combines a key exchange mechanism with encryption.\r\n\r\nHowever, it could be useful in a broader range of applications and protocols if it could be used only for key exchange, delegating the encryption part to applications.\r\n\r\nHaving standardized suites (which include an AEAD) is a no brainer for ensuring interoperability between application solely depending on HPKE for hybrid key encryption.\r\n\r\nBut it is a limitation for other protocols that already use more than HPKE. Actual examples:\r\n\r\n- Permutation-based AEADs using a rolling state (such as Xoodyak) don\u2019t fit in the HPKE model that increments a nonce after each message. However, they could still benefit from HPKE to absorb keying material.\r\n- Existing high-level protocols and APIs for stream encryption (taking care of rekeying, and out of band signalisation) could leverage HPKE as a key exchange mechanism.\r\n- In the context of a crypto library or a standard library, users will expect such a mechanism to be compatible with anything a uniform shared secret could be useful for. Including AEADs that can be better suited than AES depending on the context.\r\n\r\nA protocol will not have any interoperability issues if the key exchange mechanism and the AEAD (or anything else) are defined separately.\r\n\r\nRegistering new IANA identifiers is not a practical option for most cases. Higher-level protocols (especially application-specific ones) don\u2019t have their place in a global namespace. And even at a primitive level, while using AEGIS or GIFT-COFB as an AEAD could be justified by application requirements, having these in the IANA database would probably be unwanted.\r\n\r\nApplications will inevitably either use custom versions of HPKE, or mix and match NOISE and HPKE just to fit the set of AEADs and encryption operations currently supported by HPKE. \r\n\r\nSo, in order to encourage reusability and make HPKE also useful beyond the current encryption API, my proposal would be to reserve an AEAD identifier for protocol-defined use of the shared key, nonce, or exporter secret. Such identifier might be followed by a label in order to provide domain separation.\r\n",
           "createdAt": "2020-12-09T14:49:57Z",
           "updatedAt": "2020-12-09T16:18:39Z"
@@ -2217,7 +2217,7 @@
         },
         {
           "author": "jedisct1",
-          "authorAssociation": "NONE",
+          "authorAssociation": "CONTRIBUTOR",
           "body": "Besides improving clarity, if only the `exporter_context` is available for that use case, having a dedicated ID would have a performance advantage: the key and base nonce don't have to be computed.",
           "createdAt": "2020-12-09T16:18:12Z",
           "updatedAt": "2020-12-09T16:18:20Z"
@@ -2231,7 +2231,7 @@
         },
         {
           "author": "jedisct1",
-          "authorAssociation": "NONE",
+          "authorAssociation": "CONTRIBUTOR",
           "body": "Wouldn't a non-`0x00` dedicated ID (maybe `0xffff`) be an option, if only to make the intent clear rather than use an ID that doesn't match the actual use?",
           "createdAt": "2020-12-10T15:54:16Z",
           "updatedAt": "2020-12-10T15:54:16Z"
@@ -2249,6 +2249,13 @@
           "body": "I also want to add some AEAD algorithms and if you check out my hpke-wrap implementation you can see I'm already poaching a couple values (that will, of course, change) and how I intend on using them. The IANA registry says \"specification required\" so that means writing an I-D indicating how the algorithm is used (for my case they don't require a nonce/sequence number) once the HPKE I-D becomes an RFC. Until then, might I suggest reserving a value for \"experimental\" and have IANA assign those when it assigns 0-3.",
           "createdAt": "2020-12-10T23:30:54Z",
           "updatedAt": "2020-12-10T23:30:54Z"
+        },
+        {
+          "author": "danharkins",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "\n \u00a0 \"export-only\"? Please tell me you meant \"experimental\".\n\n \u00a0 Dan.\n\nOn 12/14/20 1:26 PM, Richard Barnes wrote:\n>\n> Closed #185 <https://github.com/cfrg/draft-irtf-cfrg-hpke/issues/185> \n> via #193 <https://github.com/cfrg/draft-irtf-cfrg-hpke/pull/193>.\n>\n> \u2014\n> You are receiving this because you commented.\n> Reply to this email directly, view it on GitHub \n> <https://github.com/cfrg/draft-irtf-cfrg-hpke/issues/185#event-4111409301>, \n> or unsubscribe \n> <https://github.com/notifications/unsubscribe-auth/ABZLRMX2M3NW4F3JWDBR6X3SUZ7HRANCNFSM4USENY7A>.\n>\n\n-- \n\"The object of life is not to be on the side of the majority, but to\nescape finding oneself in the ranks of the insane.\" -- Marcus Aurelius\n\n",
+          "createdAt": "2020-12-15T03:20:13Z",
+          "updatedAt": "2020-12-15T03:20:13Z"
         }
       ]
     },
@@ -2257,15 +2264,15 @@
       "id": "MDU6SXNzdWU3NjA1OTgyMjY=",
       "title": "Emphasize the fact that messages must never be encrypted by the recipient",
       "url": "https://github.com/cfrg/draft-irtf-cfrg-hpke/issues/187",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "jedisct1",
-      "authorAssociation": "NONE",
+      "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "Reading the document doesn't make it clear that the sender should only encrypt, and the recipient should only decrypt. Or that they must take turns and decrypt everything from the other party before encrypting a new message. That seems to be dangerous.\r\n\r\nThe proposed API doesn't prevent this, which can lead users to thinking that HPKE is safe to use for two-way communications.\r\n\r\nThat would be catastrophic as nonces would be reused.\r\n\r\nMaybe the document should insist a little bit on this ?\r\n\r\nOr, if we want to safely allow communications both ways, we can add a function to derive two AEAD keys, for each direction (the `ENCRYPT` and `DECRYPT` functions can keep the current API, if they know whether a party was the initiator or the responder).\r\n",
       "createdAt": "2020-12-09T19:12:59Z",
-      "updatedAt": "2020-12-10T16:17:10Z",
-      "closedAt": null,
+      "updatedAt": "2020-12-14T21:45:48Z",
+      "closedAt": "2020-12-14T21:45:48Z",
       "comments": [
         {
           "author": "chris-wood",
@@ -2276,7 +2283,7 @@
         },
         {
           "author": "jedisct1",
-          "authorAssociation": "NONE",
+          "authorAssociation": "CONTRIBUTOR",
           "body": "The text is easy to overlook. The confusion mainly comes from the API design:\r\n\r\nthe sender and the recipient share the same `Context` structure. A literal implementation of the documented API results in something where the recipient can encrypt.\r\n\r\n> The typical pattern for applications that need to encrypt a response back to the sender is to Export an encryption key and nonce, and then Seal up the response. (Perhaps we should add text with this suggestion to the document?)\r\n\r\nThat would be a very useful addition. HPKE being documented as \"unidirectional\" may lead applications to doing a second full key exchange to send a response back (which would obviously be fine, but quite inefficient).",
           "createdAt": "2020-12-10T16:17:10Z",
           "updatedAt": "2020-12-10T16:17:10Z"
@@ -14476,24 +14483,26 @@
       "id": "MDExOlB1bGxSZXF1ZXN0NTM4MzIwNTQ5",
       "title": "Add bidirectional response encryption example.",
       "url": "https://github.com/cfrg/draft-irtf-cfrg-hpke/pull/191",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "chris-wood",
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
       "labels": [],
       "body": "I'm not sure we should say much more here, since the number and length of all exported and subsequently derived secrets depends on the application. This should be sufficient to demonstrate the basic idea. \r\n\r\ncc @jedisct1, @blipp ",
       "createdAt": "2020-12-12T17:20:33Z",
-      "updatedAt": "2020-12-12T19:14:58Z",
+      "updatedAt": "2020-12-14T21:43:37Z",
       "baseRepository": "cfrg/draft-irtf-cfrg-hpke",
       "baseRefName": "master",
       "baseRefOid": "92d74de80ab25a365476c69724ab0125402d1696",
       "headRepository": "cfrg/draft-irtf-cfrg-hpke",
       "headRefName": "caw/add-bidirectional-note",
-      "headRefOid": "a148bbcbdd606a7b798449c488e481c337791f10",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "headRefOid": "79c5ac95981ce95197be4d73ed9b8f7293a959e5",
+      "closedAt": "2020-12-14T21:43:37Z",
+      "mergedAt": "2020-12-14T21:43:37Z",
+      "mergedBy": "bifurcation",
+      "mergeCommit": {
+        "oid": "3239dcf63fd6367208b422833a64ef2ca4cfd707"
+      },
       "comments": [
         {
           "author": "jedisct1",
@@ -14534,7 +14543,7 @@
               "originalPosition": 38,
               "body": "Instead of redoing an Extract + Expand iteration, I'd suggest a more lightweight example:\r\n\r\n```suggestion\r\n~~~\r\nkey = context.Export(\"response key\", Nk)\r\nnonce = context.Export(\"response nonce\", Nn)\r\n~~~\r\n```\r\nor if we can somehow express splitting of bitstrings in our pseudocode:\r\n\r\n```suggestion\r\n~~~\r\nkey, nonce = context.Export(\"response\", Nk + Nn)\r\n~~~\r\n```",
               "createdAt": "2020-12-12T18:52:33Z",
-              "updatedAt": "2020-12-12T18:59:56Z"
+              "updatedAt": "2020-12-14T21:40:42Z"
             }
           ]
         },
@@ -14550,6 +14559,59 @@
           "createdAt": "2020-12-12T19:04:49Z",
           "updatedAt": "2020-12-12T19:04:49Z",
           "comments": []
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTUxODk0OTQ4",
+          "commit": {
+            "abbreviatedOid": "a148bbc"
+          },
+          "author": "bifurcation",
+          "authorAssociation": "COLLABORATOR",
+          "state": "CHANGES_REQUESTED",
+          "body": "",
+          "createdAt": "2020-12-14T21:09:40Z",
+          "updatedAt": "2020-12-14T21:09:50Z",
+          "comments": [
+            {
+              "originalPosition": 27,
+              "body": "```suggestion\r\ncase.\r\n\r\nNote that the HPKE's limitations with regard to sender authentication become limits on receiver authentication in this context.  In particular, in the base mode, there is no authentication of the remote party at all.  Even in the Auth mode, where the remote party has proven that they hold a specific private key, this authentication is still subject to Key-Compromise Impersonation, as discussed in {{key-compromise-impersonation}}.\r\n```",
+              "createdAt": "2020-12-14T21:09:40Z",
+              "updatedAt": "2020-12-14T21:40:42Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTUxOTE1MDgy",
+          "commit": {
+            "abbreviatedOid": "bff04bf"
+          },
+          "author": "bifurcation",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2020-12-14T21:39:20Z",
+          "updatedAt": "2020-12-14T21:39:21Z",
+          "comments": [
+            {
+              "originalPosition": 41,
+              "body": "```suggestion\r\nNote that HPKE's limitations with regard to sender authentication\r\n```",
+              "createdAt": "2020-12-14T21:39:20Z",
+              "updatedAt": "2020-12-14T21:40:42Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTUxOTE1Njc5",
+          "commit": {
+            "abbreviatedOid": "90df33d"
+          },
+          "author": "bifurcation",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2020-12-14T21:40:10Z",
+          "updatedAt": "2020-12-14T21:40:10Z",
+          "comments": []
         }
       ]
     },
@@ -14558,26 +14620,146 @@
       "id": "MDExOlB1bGxSZXF1ZXN0NTM5NjA5NDM0",
       "title": "Provide encryption and decryption API separation with different contexts",
       "url": "https://github.com/cfrg/draft-irtf-cfrg-hpke/pull/192",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "chris-wood",
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
       "labels": [],
-      "body": "Encryption is unidirectional. This change makes it so that sender contexts\r\nonly have an encryption API, and decryption contexts have a decryption API.\r\nThis hopefully hedges against confusion and context reuse, which may lead\r\nto accidental key and nonce reuse.\r\n\r\ncc @jedisct1, @blipp ",
+      "body": "Encryption is unidirectional. This change makes it so that sender contexts\r\nonly have an encryption API, and decryption contexts have a decryption API.\r\nThis hopefully hedges against confusion and context reuse, which may lead\r\nto accidental key and nonce reuse.\r\n\r\nCloses #187.\r\n\r\ncc @jedisct1, @blipp ",
       "createdAt": "2020-12-14T15:52:58Z",
-      "updatedAt": "2020-12-14T15:52:58Z",
+      "updatedAt": "2020-12-14T21:45:49Z",
+      "baseRepository": "cfrg/draft-irtf-cfrg-hpke",
+      "baseRefName": "master",
+      "baseRefOid": "3239dcf63fd6367208b422833a64ef2ca4cfd707",
+      "headRepository": "cfrg/draft-irtf-cfrg-hpke",
+      "headRefName": "caw/context-api-separation",
+      "headRefOid": "13577d41c91f37fc0d3a2b52043ff751aba3a6ee",
+      "closedAt": "2020-12-14T21:45:48Z",
+      "mergedAt": "2020-12-14T21:45:48Z",
+      "mergedBy": "bifurcation",
+      "mergeCommit": {
+        "oid": "f94377849016e355715ab5330744b17b7db6a744"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTUxODg4NTg2",
+          "commit": {
+            "abbreviatedOid": "f5cca38"
+          },
+          "author": "bifurcation",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "I don't love how we've re-invented inheritance here :)  But it's a sensible division, and one implemented in the Go example stack, so I'm OK with it.",
+          "createdAt": "2020-12-14T21:00:28Z",
+          "updatedAt": "2020-12-14T21:00:28Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 193,
+      "id": "MDExOlB1bGxSZXF1ZXN0NTM5NjI2MDYy",
+      "title": "Reserve 0xFFFF for export-only applications.",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-hpke/pull/193",
+      "state": "MERGED",
+      "author": "chris-wood",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Closes #185.\r\n\r\ncc @jedisct1, @blipp ",
+      "createdAt": "2020-12-14T16:05:51Z",
+      "updatedAt": "2020-12-14T21:26:01Z",
       "baseRepository": "cfrg/draft-irtf-cfrg-hpke",
       "baseRefName": "master",
       "baseRefOid": "92d74de80ab25a365476c69724ab0125402d1696",
       "headRepository": "cfrg/draft-irtf-cfrg-hpke",
-      "headRefName": "caw/context-api-separation",
-      "headRefOid": "f5cca38c2d2c3eae821a1a1c77ffa395ee7c661b",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "headRefName": "caw/reserve-aead-id",
+      "headRefOid": "a08917f79c81437dbdb0bd62a0406d62d5017b7c",
+      "closedAt": "2020-12-14T21:26:00Z",
+      "mergedAt": "2020-12-14T21:26:00Z",
+      "mergedBy": "bifurcation",
+      "mergeCommit": {
+        "oid": "ece39d43f412783ab2ec87fd02fddbd23ee53765"
+      },
       "comments": [],
-      "reviews": []
+      "reviews": [
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTUxODkwOTY2",
+          "commit": {
+            "abbreviatedOid": "0bbd289"
+          },
+          "author": "bifurcation",
+          "authorAssociation": "COLLABORATOR",
+          "state": "CHANGES_REQUESTED",
+          "body": "",
+          "createdAt": "2020-12-14T21:04:04Z",
+          "updatedAt": "2020-12-14T21:04:30Z",
+          "comments": [
+            {
+              "originalPosition": 16,
+              "body": "```suggestion\r\n| 0xFFFF | Export-only      | N/A | N/A | [[RFCXXXX]] |\r\n```\r\n\r\n[\"Reserved\" has a special meaning with IANA](https://tools.ietf.org/html/rfc8126#section-6).  It means that a value is neither assigned nor available for assignment.  This one should be assigned.",
+              "createdAt": "2020-12-14T21:04:04Z",
+              "updatedAt": "2020-12-14T21:11:10Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTUxOTA2MDA3",
+          "commit": {
+            "abbreviatedOid": "a08917f"
+          },
+          "author": "bifurcation",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2020-12-14T21:25:52Z",
+          "updatedAt": "2020-12-14T21:25:52Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 194,
+      "id": "MDExOlB1bGxSZXF1ZXN0NTQwMTIxNjU0",
+      "title": "Unify to recipient, other editorial nits",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-hpke/pull/194",
+      "state": "MERGED",
+      "author": "blipp",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2020-12-15T09:54:06Z",
+      "updatedAt": "2020-12-15T15:04:30Z",
+      "baseRepository": "cfrg/draft-irtf-cfrg-hpke",
+      "baseRefName": "master",
+      "baseRefOid": "f94377849016e355715ab5330744b17b7db6a744",
+      "headRepository": "blipp/draft-irtf-cfrg-hpke",
+      "headRefName": "blipp_editorial2",
+      "headRefOid": "77960e35a9815ef859cdfee3cdbbf34f0e16fe87",
+      "closedAt": "2020-12-15T15:04:30Z",
+      "mergedAt": "2020-12-15T15:04:30Z",
+      "mergedBy": "chris-wood",
+      "mergeCommit": {
+        "oid": "6b61d9cba99d3f3098f22fea52a25b0573bb1a33"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTUyNTUzMDAz",
+          "commit": {
+            "abbreviatedOid": "77960e3"
+          },
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2020-12-15T15:04:25Z",
+          "updatedAt": "2020-12-15T15:04:25Z",
+          "comments": []
+        }
+      ]
     }
   ]
 }
