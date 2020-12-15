@@ -834,7 +834,7 @@ address div.right {
 </tr></thead>
 <tfoot><tr>
 <td class="left">Barnes, et al.</td>
-<td class="center">Expires 17 June 2021</td>
+<td class="center">Expires 18 June 2021</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -847,12 +847,12 @@ address div.right {
 <dd class="internet-draft">draft-irtf-cfrg-hpke-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2020-12-14" class="published">14 December 2020</time>
+<time datetime="2020-12-15" class="published">15 December 2020</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Informational</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2021-06-17">17 June 2021</time></dd>
+<dd class="expires"><time datetime="2021-06-18">18 June 2021</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -907,7 +907,7 @@ HKDF, and SHA2.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 17 June 2021.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 18 June 2021.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1658,7 +1658,7 @@ parameters (<code>enc</code>, <code>psk_id</code>, etc.) are transported between
 recipient by some application making use of HPKE. Moreover, a recipient with more
 than one public key needs some way of determining which of its public keys was
 used for the encapsulation operation. As an example, applications may send this
-information alongside a ciphertext from sender to receiver. Specification of
+information alongside a ciphertext from sender to recipient. Specification of
 such a mechanism is left to the application. See <a href="#message-encoding" class="xref">Section 9</a> for more
 details.<a href="#section-5-7" class="pilcrow">¶</a></p>
 <p id="section-5-8">Note that some KEMs may not support <code>AuthEncap()</code> or <code>AuthDecap()</code>.
@@ -1765,7 +1765,7 @@ def KeySchedule&lt;ROLE&gt;(mode, shared_secret, info, psk, psk_id):
 </pre><a href="#section-5.1-10" class="pilcrow">¶</a>
 </div>
 <p id="section-5.1-11">The <code>ROLE</code> template parameter is either S or R, depending on the role of
-sender or receiver, respectively. See <a href="#hpke-dem" class="xref">Section 5.2</a> for a discussion of the
+sender or recipient, respectively. See <a href="#hpke-dem" class="xref">Section 5.2</a> for a discussion of the
 key schedule output, including the role-specific <code>Context</code> structure and its API.<a href="#section-5.1-11" class="pilcrow">¶</a></p>
 <p id="section-5.1-12">Note that the <code>key_schedule_context</code> construction in <code>KeySchedule()</code> is
 equivalent to serializing a structure of the following form in the TLS presentation
@@ -1954,7 +1954,7 @@ def ContextS.Seal(aad, pt):
   return ct
 </pre><a href="#section-5.2-8" class="pilcrow">¶</a>
 </div>
-<p id="section-5.2-9">The receiver's context can decrypt a ciphertext <code>ct</code> with assciated
+<p id="section-5.2-9">The recipient's context can decrypt a ciphertext <code>ct</code> with assciated
 data <code>aad</code> as follows:<a href="#section-5.2-9" class="pilcrow">¶</a></p>
 <div class="artwork art-text alignLeft" id="section-5.2-10">
 <pre>
@@ -1984,7 +1984,7 @@ def Context&lt;ROLE&gt;.IncrementSeq():
 <p id="section-5.2-13">The sender's context MUST NOT be used for decryption. Similarly, the recipient's
 context MUST NOT be used for encryption. Higher-level protocols re-using the HPKE
 key exchange for more general purposes can derive separate keying material as
-needed using use the Export interface; see <a href="#hpke-export" class="xref">Section 5.3</a> and <a href="#bidirectional" class="xref">Section 8.7</a> 
+needed using use the Secret Export interface; see <a href="#hpke-export" class="xref">Section 5.3</a> and <a href="#bidirectional" class="xref">Section 8.7</a> 
 for more details.<a href="#section-5.2-13" class="pilcrow">¶</a></p>
 <p id="section-5.2-14">It is up to the application to ensure that encryptions and decryptions are
 done in the proper sequence, so that encryption and decryption nonces align.
@@ -2839,7 +2839,7 @@ the case if the adversary acts as sender.<a href="#section-8.4-2" class="pilcrow
 perform a dictionary attack. Given a set <code>S</code> of possible PSK values, the
 attacker generates an HPKE ciphertext for each value in <code>S</code>, and submits
 the resulting ciphertexts to the oracle to learn which PSK is being used by
-the receiver. Further, because HPKE uses AEAD schemes that are not key-committing,
+the recipient. Further, because HPKE uses AEAD schemes that are not key-committing,
 an attacker can mount a partitioning oracle attack <span>[<a href="#LGR20" class="xref">LGR20</a>]</span> which can recover
 the PSK from a set of <code>S</code> possible PSK values, with |S| = m*k, in roughly
 m + log k queries to the oracle using ciphertexts of length proportional to
@@ -2916,11 +2916,11 @@ padding policies.<a href="#section-8.6-2.4" class="pilcrow">¶</a>
 <a href="#section-8.7" class="section-number selfRef">8.7. </a><a href="#name-bidirectional-encryption" class="section-name selfRef">Bidirectional Encryption</a>
         </h3>
 <p id="section-8.7-1">As discussed in <a href="#hpke-dem" class="xref">Section 5.2</a>, HPKE encryption is unidirectional from sender
-to receiver. Applications that require bidirectional encryption can derive
+to recipient. Applications that require bidirectional encryption can derive
 necessary keying material with the Secret Export interface <a href="#hpke-export" class="xref">Section 5.3</a>.
 The type and length of such keying material depends on the application use
 case.<a href="#section-8.7-1" class="pilcrow">¶</a></p>
-<p id="section-8.7-2">As an example, if an application needs AEAD encryption from receiver to
+<p id="section-8.7-2">As an example, if an application needs AEAD encryption from recipient to
 sender, it can derive a key and nonce from the corresponding HPKE context
 as follows:<a href="#section-8.7-2" class="pilcrow">¶</a></p>
 <div class="artwork art-text alignLeft" id="section-8.7-3">
@@ -2932,7 +2932,7 @@ nonce = context.Export("response nonce", Nn)
 <p id="section-8.7-4">In this example, the length of each secret is based on the AEAD algorithm
 used for the corresponding HPKE context.<a href="#section-8.7-4" class="pilcrow">¶</a></p>
 <p id="section-8.7-5">Note that HPKE's limitations with regard to sender authentication become limits
-on receiver authentication in this context. In particular, in the base mode,
+on recipient authentication in this context. In particular, in the Base mode,
 there is no authentication of the remote party at all. Even in the Auth mode,
 where the remote party has proven that they hold a specific private key, this
 authentication is still subject to Key-Compromise Impersonation, as discussed
