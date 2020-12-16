@@ -2133,9 +2133,9 @@ Internet-Draft                    HPKE                     December 2020
    [I-D.ietf-tls-esni]
               Rescorla, E., Oku, K., Sullivan, N., and C. Wood, "TLS
               Encrypted Client Hello", Work in Progress, Internet-Draft,
-              draft-ietf-tls-esni-08, 16 October 2020,
+              draft-ietf-tls-esni-09, 16 December 2020,
               <http://www.ietf.org/internet-drafts/draft-ietf-tls-esni-
-              08.txt>.
+              09.txt>.
 
    [IEEE1363] Institute of Electrical and Electronics Engineers, "IEEE
               1363a, Standard Specifications for Public Key Cryptography
