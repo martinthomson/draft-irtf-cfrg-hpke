@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2020-12-16T14:19:01.602257+00:00",
+  "timestamp": "2020-12-16T23:04:49.694670+00:00",
   "repo": "cfrg/draft-irtf-cfrg-hpke",
   "labels": [
     {
@@ -2108,15 +2108,15 @@
       "id": "MDU6SXNzdWU3MzY1Mjg3MTI=",
       "title": "List known implementations",
       "url": "https://github.com/cfrg/draft-irtf-cfrg-hpke/issues/170",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "chris-wood",
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
       "labels": [],
       "body": "I started a list of implementations here:\r\n\r\n   https://github.com/cfrg/draft-irtf-cfrg-hpke/blob/master/README.md\r\n\r\nWe should fill this out with other known implementations.\r\n\r\ncc @kjacobs-moz, @davidben, @dmcardle, @raphaelrobert, @nymble, @danielhavir, @armfazh, @fredericjacobs, @mcarrickscott",
       "createdAt": "2020-11-05T01:10:01Z",
-      "updatedAt": "2020-11-19T11:30:57Z",
-      "closedAt": null,
+      "updatedAt": "2020-12-16T14:19:23Z",
+      "closedAt": "2020-12-16T14:19:23Z",
       "comments": [
         {
           "author": "danharkins",
@@ -2145,6 +2145,13 @@
           "body": "You can fork the repository and create a branch on your own copy. \n\nOn Wed, Nov 18, 2020, at 10:12 PM, Dan Harkins wrote:\n> \n> \n> \n>   I can't create a branch. Would it be possible to give me permissions on\n> the repository?\n> \n>   regards,\n> \n>   Dan.\n> \n> On 11/18/20 4:44 PM, Christopher Wood wrote:\n> >\n> > @danharkins <https://github.com/danharkins>, can you please submit a \n> > PR with the change? (See #171 \n> > <https://github.com/cfrg/draft-irtf-cfrg-hpke/pull/171> and #172 \n> > <https://github.com/cfrg/draft-irtf-cfrg-hpke/pull/172> above for \n> > examples.)\n> >\n> > \u2014\n> > You are receiving this because you were mentioned.\n> > Reply to this email directly, view it on GitHub \n> > <https://github.com/cfrg/draft-irtf-cfrg-hpke/issues/170#issuecomment-730049171>, \n> > or unsubscribe \n> > <https://github.com/notifications/unsubscribe-auth/ABZLRMVPTX56Y4EUPUMPVK3SQRS7HANCNFSM4TKXMA2Q>.\n> >\n> \n> -- \n> \"The object of life is not to be on the side of the majority, but to\n> escape finding oneself in the ranks of the insane.\" -- Marcus Aurelius\n> \n> \u2014\n> You are receiving this because you authored the thread.\n> Reply to this email directly, view it on GitHub \n> <https://github.com/cfrg/draft-irtf-cfrg-hpke/issues/170#issuecomment-730153529>, or unsubscribe <https://github.com/notifications/unsubscribe-auth/AAQSJEGNMPCX3Y2LWWIBE6LSQSZOFANCNFSM4TKXMA2Q>.\n>\n",
           "createdAt": "2020-11-19T11:30:57Z",
           "updatedAt": "2020-11-19T11:30:57Z"
+        },
+        {
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "body": "We have a good list now. Closing.",
+          "createdAt": "2020-12-16T14:19:23Z",
+          "updatedAt": "2020-12-16T14:19:23Z"
         }
       ]
     },
@@ -14773,7 +14780,7 @@
       "labels": [],
       "body": "This change fixes some editorial issues and then updates the test vectors. It also adds new export-only test vectors for the `0xFFFF` AEAD ID. \r\n\r\ncc @blipp ",
       "createdAt": "2020-12-15T15:07:50Z",
-      "updatedAt": "2020-12-16T14:18:21Z",
+      "updatedAt": "2020-12-16T23:00:22Z",
       "baseRepository": "cfrg/draft-irtf-cfrg-hpke",
       "baseRefName": "master",
       "baseRefOid": "6b61d9cba99d3f3098f22fea52a25b0573bb1a33",
@@ -14807,8 +14814,48 @@
           "body": "Everything that's implemented (including ExportOnly now) is passing in my impl",
           "createdAt": "2020-12-16T02:22:03Z",
           "updatedAt": "2020-12-16T02:22:03Z"
+        },
+        {
+          "author": "sftcd",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "\n\nOn 15/12/2020 15:08, Christopher Wood wrote:\n> This change fixes some editorial issues and then updates the test\n> vectors. It also adds new export-only test vectors for the `0xFFFF`\n> AEAD ID.\nI've not implemented the 0xffff stuff, but having updated the\nlabels, my code seems to be ok with the new test vectors. Do\nI need to submit a PR or can someone do the 06->07 change for\nhappykey in the implementation status table?\n\nS.\n\n",
+          "createdAt": "2020-12-16T21:57:55Z",
+          "updatedAt": "2020-12-16T21:57:55Z"
+        },
+        {
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Thanks, @sftcd! I'll update the happykey reference.",
+          "createdAt": "2020-12-16T23:00:22Z",
+          "updatedAt": "2020-12-16T23:00:22Z"
         }
       ],
+      "reviews": []
+    },
+    {
+      "number": 196,
+      "id": "MDExOlB1bGxSZXF1ZXN0NTQxMjgyNDgx",
+      "title": "Update draft version for HPKE-Compact",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-hpke/pull/196",
+      "state": "OPEN",
+      "author": "jedisct1",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2020-12-16T16:19:59Z",
+      "updatedAt": "2020-12-16T16:19:59Z",
+      "baseRepository": "cfrg/draft-irtf-cfrg-hpke",
+      "baseRefName": "master",
+      "baseRefOid": "8eb61be8e092a9560106d7ef489181c467b44664",
+      "headRepository": "jedisct1/draft-irtf-cfrg-hpke",
+      "headRefName": "patch-4",
+      "headRefOid": "610d5ea63538326d5a64a1a1de0f1e734ebee7c2",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
       "reviews": []
     }
   ]
