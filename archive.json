@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2020-12-15T15:05:11.598611+00:00",
+  "timestamp": "2020-12-16T14:19:01.602257+00:00",
   "repo": "cfrg/draft-irtf-cfrg-hpke",
   "labels": [
     {
@@ -14760,6 +14760,56 @@
           "comments": []
         }
       ]
+    },
+    {
+      "number": 195,
+      "id": "MDExOlB1bGxSZXF1ZXN0NTQwMzE5OTk2",
+      "title": "Update test vectors to -07.",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-hpke/pull/195",
+      "state": "MERGED",
+      "author": "chris-wood",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "This change fixes some editorial issues and then updates the test vectors. It also adds new export-only test vectors for the `0xFFFF` AEAD ID. \r\n\r\ncc @blipp ",
+      "createdAt": "2020-12-15T15:07:50Z",
+      "updatedAt": "2020-12-16T14:18:21Z",
+      "baseRepository": "cfrg/draft-irtf-cfrg-hpke",
+      "baseRefName": "master",
+      "baseRefOid": "6b61d9cba99d3f3098f22fea52a25b0573bb1a33",
+      "headRepository": "cfrg/draft-irtf-cfrg-hpke",
+      "headRefName": "caw/new-test-vectors",
+      "headRefOid": "4ce52cf9d05a7645e58e372a17b8ef6119245944",
+      "closedAt": "2020-12-16T14:18:21Z",
+      "mergedAt": "2020-12-16T14:18:21Z",
+      "mergedBy": "bifurcation",
+      "mergeCommit": {
+        "oid": "8eb61be8e092a9560106d7ef489181c467b44664"
+      },
+      "comments": [
+        {
+          "author": "jedisct1",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "The new test vectors are matching what I get with the new label strings.",
+          "createdAt": "2020-12-15T18:52:45Z",
+          "updatedAt": "2020-12-15T18:52:45Z"
+        },
+        {
+          "author": "kjacobs-moz",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "These vectors are also passing in NSS (with the same testing limitations noted in https://github.com/cisco/go-hpke/pull/49#issuecomment-745388276).",
+          "createdAt": "2020-12-16T00:33:19Z",
+          "updatedAt": "2020-12-16T00:33:19Z"
+        },
+        {
+          "author": "rozbb",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Everything that's implemented (including ExportOnly now) is passing in my impl",
+          "createdAt": "2020-12-16T02:22:03Z",
+          "updatedAt": "2020-12-16T02:22:03Z"
+        }
+      ],
+      "reviews": []
     }
   ]
 }
