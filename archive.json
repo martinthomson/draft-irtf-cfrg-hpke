@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2020-12-16T23:04:49.694670+00:00",
+  "timestamp": "2020-12-17T17:24:33.715389+00:00",
   "repo": "cfrg/draft-irtf-cfrg-hpke",
   "labels": [
     {
@@ -14837,26 +14837,134 @@
       "id": "MDExOlB1bGxSZXF1ZXN0NTQxMjgyNDgx",
       "title": "Update draft version for HPKE-Compact",
       "url": "https://github.com/cfrg/draft-irtf-cfrg-hpke/pull/196",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "jedisct1",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "",
       "createdAt": "2020-12-16T16:19:59Z",
-      "updatedAt": "2020-12-16T16:19:59Z",
+      "updatedAt": "2020-12-17T00:15:00Z",
       "baseRepository": "cfrg/draft-irtf-cfrg-hpke",
       "baseRefName": "master",
       "baseRefOid": "8eb61be8e092a9560106d7ef489181c467b44664",
       "headRepository": "jedisct1/draft-irtf-cfrg-hpke",
       "headRefName": "patch-4",
       "headRefOid": "610d5ea63538326d5a64a1a1de0f1e734ebee7c2",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "closedAt": "2020-12-16T23:06:22Z",
+      "mergedAt": "2020-12-16T23:06:22Z",
+      "mergedBy": "chris-wood",
+      "mergeCommit": {
+        "oid": "f498ca39d5d7952313548ad60f742a04477ac484"
+      },
       "comments": [],
-      "reviews": []
+      "reviews": [
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTU0MTU3NTI3",
+          "commit": {
+            "abbreviatedOid": "610d5ea"
+          },
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2020-12-16T23:06:19Z",
+          "updatedAt": "2020-12-16T23:06:19Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 197,
+      "id": "MDExOlB1bGxSZXF1ZXN0NTQxNDk0NzY4",
+      "title": "Updated draft compliance version of rust-hpke",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-hpke/pull/197",
+      "state": "MERGED",
+      "author": "rozbb",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2020-12-16T23:13:53Z",
+      "updatedAt": "2020-12-16T23:14:32Z",
+      "baseRepository": "cfrg/draft-irtf-cfrg-hpke",
+      "baseRefName": "master",
+      "baseRefOid": "f498ca39d5d7952313548ad60f742a04477ac484",
+      "headRepository": "rozbb/draft-irtf-cfrg-hpke",
+      "headRefName": "master",
+      "headRefOid": "daedfbd240045fb179dcd6d87b6c9c44a664ec70",
+      "closedAt": "2020-12-16T23:14:32Z",
+      "mergedAt": "2020-12-16T23:14:32Z",
+      "mergedBy": "chris-wood",
+      "mergeCommit": {
+        "oid": "99e2857b31f9a235ef0a9d0d9250330ddf753918"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTU0MTYxNDg5",
+          "commit": {
+            "abbreviatedOid": "daedfbd"
+          },
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2020-12-16T23:14:27Z",
+          "updatedAt": "2020-12-16T23:14:27Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 198,
+      "id": "MDExOlB1bGxSZXF1ZXN0NTQyMDA5MTEz",
+      "title": "Bump CIRCL version to 07",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-hpke/pull/198",
+      "state": "MERGED",
+      "author": "cjpatton",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "CIRCL now implements draft-07 in full except for the new AEAD code point for \"Export Only\" mode. This is forthcoming:\r\nhttps://github.com/cloudflare/circl/pull/205",
+      "createdAt": "2020-12-17T17:17:25Z",
+      "updatedAt": "2020-12-17T17:23:40Z",
+      "baseRepository": "cfrg/draft-irtf-cfrg-hpke",
+      "baseRefName": "master",
+      "baseRefOid": "99e2857b31f9a235ef0a9d0d9250330ddf753918",
+      "headRepository": "cjpatton/draft-irtf-cfrg-hpke",
+      "headRefName": "bumph-circl-07",
+      "headRefOid": "0324d388b8d262c82c4aea0f5de64ed79a2a3926",
+      "closedAt": "2020-12-17T17:23:40Z",
+      "mergedAt": "2020-12-17T17:23:40Z",
+      "mergedBy": "chris-wood",
+      "mergeCommit": {
+        "oid": "30323ec90b42ca371080dbb3b7faa8dfdd439955"
+      },
+      "comments": [
+        {
+          "author": "cjpatton",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "cc/ @chris-wood",
+          "createdAt": "2020-12-17T17:17:45Z",
+          "updatedAt": "2020-12-17T17:17:45Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTU0ODIxNzEy",
+          "commit": {
+            "abbreviatedOid": "0324d38"
+          },
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2020-12-17T17:23:35Z",
+          "updatedAt": "2020-12-17T17:23:35Z",
+          "comments": []
+        }
+      ]
     }
   ]
 }
