@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2020-12-17T17:24:33.715389+00:00",
+  "timestamp": "2020-12-19T03:59:25.272243+00:00",
   "repo": "cfrg/draft-irtf-cfrg-hpke",
   "labels": [
     {
@@ -14965,6 +14965,34 @@
           "comments": []
         }
       ]
+    },
+    {
+      "number": 199,
+      "id": "MDExOlB1bGxSZXF1ZXN0NTQyNzQzNTcy",
+      "title": "update hpke-wrap version",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-hpke/pull/199",
+      "state": "MERGED",
+      "author": "danharkins",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "current with -07 now",
+      "createdAt": "2020-12-18T19:51:23Z",
+      "updatedAt": "2020-12-19T03:58:20Z",
+      "baseRepository": "cfrg/draft-irtf-cfrg-hpke",
+      "baseRefName": "master",
+      "baseRefOid": "30323ec90b42ca371080dbb3b7faa8dfdd439955",
+      "headRepository": "danharkins/draft-irtf-cfrg-hpke",
+      "headRefName": "master",
+      "headRefOid": "3d574e879c3f24de1d37d7b7788fdc844a3a1af8",
+      "closedAt": "2020-12-19T03:58:20Z",
+      "mergedAt": "2020-12-19T03:58:19Z",
+      "mergedBy": "chris-wood",
+      "mergeCommit": {
+        "oid": "93702b25b2a62208c1f575ee3c7ae1740bd3c22e"
+      },
+      "comments": [],
+      "reviews": []
     }
   ]
 }
